@@ -939,15 +939,20 @@ int runAlign( const Perturb& perturb )
 			perturb.sheet( hooks );
 		sheet.hooks = hooks;
 		sheet.Scatter( 1, count );
+		//Each pole's own count: a slide that carried filings from one pole to
+		//the other would raise the total too (a mutant did).
 		auto near = [ & ]() {
-			size_t n = 0;
+			std::vector< size_t > n( m.poles.size(), 0 );
 			for( const Filing& f : sheet.Filings() )
-				for( const HPole& p : m.poles )
-					n += ( f.x - p.x ) * ( f.x - p.x ) + ( f.y - p.y ) * ( f.y - p.y ) < m.d * m.d;
+				for( size_t k = 0; k < m.poles.size(); ++k )
+				{
+					const HPole& p = m.poles[ k ];
+					n[ k ] += ( f.x - p.x ) * ( f.x - p.x ) + ( f.y - p.y ) * ( f.y - p.y ) < m.d * m.d;
+				}
 			return n;
 		};
-		const size_t at0 = near();
-		size_t at10 = 0;
+		const std::vector< size_t > at0 = near();
+		std::vector< size_t > at10;
 		double after1 = 0.0;
 		for( int tap = 1; tap <= 40; ++tap )
 		{
@@ -957,14 +962,21 @@ int runAlign( const Perturb& perturb )
 			if( tap == 10 )
 				at10 = near();
 		}
-		const size_t at40   = near();
+		const std::vector< size_t > at40 = near();
 		size_t strong       = 0;
 		const double after40 = meanError( sheet.Filings(), m, mu, 2.0, &strong );
 		Check( after40 < after1 && after40 < 22.5,
 		       fmt( "the full model, over the %zu where A >= 2F: mean angle to the magnets' field %.1f deg after 1 tap, %.1f after 40 (below half a scattered "
 		            "sheet's 45: chosen)",
 		            strong, after1, after40 ) );
-		Check( at10 > at0 && at40 > at10, fmt( "filings within d of a pole: %zu scattered, %zu after 10 taps, %zu after 40 (rising: they creep up |B|^2)", at0, at10, at40 ) );
+		bool rising = at0.size() == at10.size() && at0.size() == at40.size();
+		std::string counts;
+		for( size_t k = 0; rising && k < at0.size(); ++k )
+		{
+			rising = rising && at10[ k ] > at0[ k ] && at40[ k ] > at10[ k ];
+			counts += fmt( "%spole %zu %zu, %zu, %zu", k ? "; " : "", k + 1, at0[ k ], at10[ k ], at40[ k ] );
+		}
+		Check( rising, fmt( "filings within d of each pole, scattered, after 10 taps, after 40: %s (each rising: they creep up |B|^2)", counts.c_str() ) );
 	}
 	return Verdict();
 }
@@ -1398,10 +1410,14 @@ int runTaps( const Perturb& perturb )
 		//The ghost's flux against a soft kick's, from the music's own numbers
 		//(bins of 0.15 plus 0.02 or 0.6, square-rooted as the analyser does).
 		const double ratio = ( std::sqrt( 0.17 ) - std::sqrt( 0.15 ) ) / ( std::sqrt( 0.75 ) - std::sqrt( 0.15 ) );
-		Check( doses.size() == atHalfWant.size() && hard > soft && soft > 0.0 && ghost < 2.0 * ratio * soft,
-		       fmt( "%4dx%-4d a hard kick taps harder: soft kicks' doses at most %.3f, hard kicks' at least %.3f x the reference; the ghost's %.4f (its flux is %.1f%% "
-		            "of a soft kick's: tolerance twice that, of the soft kicks' dose)",
-		            raster.w, raster.h, soft, hard, ghost, 100.0 * ratio ) );
+		//A hard kick is the loudest onset yet, so its hit is 1: the full
+		//reference dose (Tap Strength 1), to float rounding.
+		const double hardMax = std::max( { dose[ 36 ], dose[ 96 ], dose[ 156 ] } );
+		Check( doses.size() == atHalfWant.size() && std::fabs( hard - 1.0 ) <= 1e-6 && std::fabs( hardMax - 1.0 ) <= 1e-6 && hard > soft && soft > 0.0 &&
+		           ghost < 2.0 * ratio * soft,
+		       fmt( "%4dx%-4d a hard kick taps harder: hard kicks at %.7f to %.7f x the reference (the loudest onset yet: 1, tolerance 1e-6, float), soft kicks at "
+		            "most %.3f; the ghost's %.4f (its flux is %.1f%% of a soft kick's: tolerance twice that, of the soft kicks' dose)",
+		            raster.w, raster.h, hard, hardMax, soft, ghost, 100.0 * ratio ) );
 
 		//Tap On Beat at 128 BPM: once a beat, on the frame its boundary falls in.
 		{
