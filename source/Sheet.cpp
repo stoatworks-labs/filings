@@ -26,8 +26,10 @@ double unit( uint32_t seed, uint32_t k, uint32_t channel )
 }
 
 /// The closest points of two segments p0 + s d1, s in [ -h, h ], and
-/// q0 + t d2, t in [ -h, h ] (unit d1, d2): Ericson, Real-Time Collision
-/// Detection, 5.1.9, re-centred. Returns the squared distance; cp, cq the points.
+/// q0 + t d2, t in [ -h, h ] (unit d1, d2), by clamping one parameter and
+/// recomputing the other, as in Ericson's Real-Time Collision Detection (2005;
+/// written from memory, the book not re-read), re-centred. fgtest --step checks
+/// it against an endpoint search. Returns the squared distance; cp, cq the points.
 double segmentDistance( double px, double py, double d1x, double d1y, double qx, double qy, double d2x, double d2y, double h,
                         double& cpx, double& cpy, double& cqx, double& cqy )
 {

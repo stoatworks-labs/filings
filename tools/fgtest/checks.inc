@@ -805,7 +805,7 @@ int runLaw( const Perturb& perturb )
 			worst = std::max( worst, std::fabs( hWrap( sheet.Filings()[ i ].theta - want[ i ].theta ) ) );
 			moved += sheet.Filings()[ i ].theta != initial[ i ].theta;
 		}
-		Check( worst <= 1e-9, fmt( "200 lone needles, three full taps at the defaults: worst %.2e rad from the harness's RK4 in the pole-mean field (tolerance 1e-9 rad); %d "
+		Check( worst <= 1e-9, fmt( "200 lone needles 0.1 frame heights apart, three full taps (the default dipole, L 1/90, mu 0.3): worst %.2e rad from the harness's RK4 in the pole-mean field (tolerance 1e-9 rad); %d "
 		                           "turned",
 		                           worst, moved ) );
 	}
