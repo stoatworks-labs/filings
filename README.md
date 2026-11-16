@@ -92,12 +92,12 @@ need no raster.
 | shaders | all 4 compile through `glslc`, not merely through Apple's driver |
 | the bundle | universal (`x86_64 arm64`), exports `plugMain`, ad-hoc signs; `oxbow` reads `SW Filings` / `FG01` / `effect` and renders through it |
 
-Render cost, from verify.sh's run on 16 November 2026 with other builds sharing the machine,
-at the defaults (12,478 filings) with the harness's kicks: GPU time **0.05 ms** at 720p,
-**0.26 ms** at 1080p and **1.33 ms** at 4K (one run); a whole frame without a tap **0.28**,
-**0.49** and **2.06 ms**. A frame with a tap adds the tap's CPU work: **2.4**, **3.4** and
-**5.3 ms** median (worst **3.1**, **7.5** and **28.7 ms**, the worst being the first tap
-measured). At 60,000 filings a tap frame takes **8.6 ms** at 1080p. macOS only.
+Render cost, from verify.sh's final run on 16 November 2026 with other builds sharing the
+machine, at the defaults (12,478 filings) with the harness's kicks: GPU time **0.05 ms** at
+720p, **0.27 ms** at 1080p and **1.29 ms** at 4K (one run); a whole frame without a tap
+**0.28**, **0.50** and **1.98 ms**. A frame with a tap adds the tap's CPU work: **2.6**,
+**2.8** and **4.9 ms** median (worst **2.6**, **6.4** and **24.5 ms**, the worst being the
+first tap measured). At 60,000 filings a tap frame takes **8.5 ms** at 1080p. macOS only.
 
 ### Not established
 

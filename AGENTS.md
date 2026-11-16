@@ -207,8 +207,8 @@ picture, Pole 3 and 4 with Poles at 4, Tap with Tap On Off.
   heights instead? It matters for the hub, which will send positions over OSC.
 - **The hub's mapping**: one hand or person per pole, sign by what? The X/Y controls work
   without it today.
-- **A tap's CPU work lands on one frame**: 2–3 ms at the defaults, 8.6 ms at 60,000 filings, on
-  the kick. Spreading a tap over two frames would halve the spike but delay the picture; is the
+- **A tap's CPU work lands on one frame**: 2–3 ms at the defaults, about 8.5 ms at 60,000 filings,
+  on the kick. Spreading a tap over two frames would halve the spike but delay the picture; is the
   spike acceptable in a busy Resolume composition?
 - **The 4K first-tap spike** (25 ms once, 5 ms after) is unexplained.
 - **The friction and the reference dose are chosen.** A real sheet of filings on paper, tapped,
