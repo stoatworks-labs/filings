@@ -82,10 +82,15 @@ composite.
 - **Provisional hand copies:** `source/StoatworksAbout*.h` (guide = "", no user guide) and
   `ATTRIBUTIONS.md`. Once the project is registered in stoatworks-backend, `sync-about.py`
   and `sync-attributions.py` generate them; edit them there then.
-- `.github/workflows/` has never run: no remote. GitHub Actions only on a public repo; if
-  this is ever created private, delete them first.
-- Local only: `~/dev/filings`, no remote, nothing released, not on the website, never
-  loaded into Resolume. The spec is `~/Projects/resolume/specs/SPEC-filings.md`.
+- **Public:** `stoatworks-labs/filings`, checked out at `~/Projects/resolume/filings` (every
+  edit there goes through a worktree). `ci.yml` runs on every push and pull request (macOS
+  `fgtest --offline` and glslc, a Windows MSVC build); `release.yml` builds the universal
+  bundle, the Windows DLL (checked by `tools/wincheck.ps1`), the zips, the dmg and the
+  installer, and publishes on a `v*` tag. A `workflow_dispatch` run builds without
+  publishing: that is how a Windows DLL gets to win-lab before a tag. CI cannot sign: the
+  autosign agent on the release Mac signs and notarises the macOS assets after publication.
+  GitHub Actions only because the repo is public (the fleet's rule).
+- The spec is `~/Projects/resolume/specs/SPEC-filings.md`.
 
 ## Diagnostics
 

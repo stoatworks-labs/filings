@@ -121,7 +121,7 @@ first tap measured). At 60,000 filings a tap frame takes **8.5 ms** at 1080p. ma
 macOS (universal: Apple Silicon and Intel):
 
 ```bash
-git clone --recursive <this repo>
+git clone --recursive https://github.com/stoatworks-labs/filings
 ```
 
 ```bash
