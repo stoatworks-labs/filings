@@ -1,8 +1,9 @@
 # filings
 
 > **AI-assisted project.** This codebase was created with [Claude](https://claude.com/claude-code)
-> (Anthropic), directed and reviewed by a human author. **It has never been loaded into
-> Resolume.** What's established is established by an offline harness, `fgtest`, that drives
+> (Anthropic), directed and reviewed by a human author. **In Resolume it has been seen
+> working, on the beat, but not with real music or in a show** ([Status](#status)). The
+> measurements are by an offline harness, `fgtest`, that drives
 > the real plugin class through the same `ProcessOpenGL` a host calls, in a headless GL
 > context on a synthetic clock, on this Mac's GPU at two rasters. The magnets' field is the
 > closed form of point poles to **1e-15**; a filing's turn under a tap matches an RK4
@@ -62,7 +63,11 @@ change nothing you can see.
 
 ## Status
 
-**v0.1.0, local only, 16 November 2026. Never loaded into Resolume.**
+**v0.1.0, 18 November 2026: the first release.** Measured offline on macOS, the table below;
+then loaded into Resolume Arena 7.29.0 on a Mac, where it held still with tapping off and
+brought the field lines up on Arena's beat. On Windows the release workflow loads the DLL as a
+host does; Arena's gate on Windows is recorded below once it has run. It has not met real
+music in Resolume.
 
 ### Measured offline, on macOS
 
@@ -99,11 +104,40 @@ machine, at the defaults (12,478 filings) with the harness's kicks: GPU time **0
 **2.8** and **4.9 ms** median (worst **2.6**, **6.4** and **24.5 ms**, the worst being the
 first tap measured). At 60,000 filings a tap frame takes **8.5 ms** at 1080p. macOS only.
 
+### In Resolume (18 November 2026)
+
+**macOS: Arena 7.29.0 (33052), Apple M4 Max (GL 4.1 Metal).** A local universal build of the
+release source (`build-verify/Filings.bundle`, ad-hoc signed), installed for the probe and
+taken out after. Arena opened a show composition, so the probe added one layer on top with a
+white 1920×1080 still, put SW Filings on its clip, drove it over Arena's REST API, read Arena's
+composition monitor, deleted the layer (7 layers before and after) and quit without saving.
+
+- Arena's log: `registered extension: 'SW Filings' uid: FG01 category: 1`, beside SW
+  Filament's `FI01`.
+- All 31 controls shown, plus Arena's own Opacity, every default as declared. About reads
+  `Filings v0.1.0 - MIT - Stoatworks Labs, stoatworks-labs.com`.
+- **Tap On Off:** the composition monitor didn't change by one level in 2.5 s, nor when Pole
+  1 X and Pole 2 Y moved. **Tap On Beat**, at Arena's 120 BPM: the field lines came up over
+  8 seconds (a mean change of 44, then 34, levels in the middle of the frame). Off again: still.
+  Bar tapped too.
+- **Tap** and **Scatter** pressed over REST each worked: one tap, then a fresh sheet.
+- **Onset** with the show's audio silent: no taps in 4 s. Onset on real music is untested.
+- Pole Y runs up from the bottom, as the guide says: Y 0.25 put the pole in the lower quarter.
+- Arena's clock is in milliseconds; the plugin's log read its scale as 0.001.
+
+[docs/arena.jpg](docs/arena.jpg) is the composition monitor after 8 s of Tap On Beat.
+
+**Windows:** the fleet's Arena gate on win-lab had not run when v0.1.0 was tagged (win-lab
+was busy with other plugins); what the release workflow checks is under Not established.
+
 ### Not established
 
-- **No host has loaded it.** Not Arena, not Avenue, on any platform; no sound has reached it.
-  `oxbow` (the fleet's test host) reads the bundle and renders through it, which is all.
-- **Windows** has never been built. The CI workflow that would is in the repo and has never run.
+- **Real music, and a show.** Onset hasn't met Resolume's audio analysis on music, and where
+  its FFT bins sit is unmeasured (below). Nothing was timed inside Resolume. Avenue is
+  untested.
+- **Windows** builds under MSVC in CI (first on 7c38f44, no traps), and the release workflow
+  loads `Filings.dll` as a host does and reads back `SW Filings`, `FG01`, an effect and its 31
+  parameters. Nothing was timed on Windows.
 - **Chosen, not measured:** the friction (no checked figure for iron on paper was found), how
   long a tap frees the sheet (one reference tap turns a filing in 4 mT by tan ψ → tan ψ/e),
   the filing's shape (a 1 mm needle of aspect 5), the softened neighbour field and its reach.
@@ -111,10 +145,14 @@ first tap measured). At 60,000 filings a tap frame takes **8.5 ms** at 1080p. ma
   never saturate, and the magnets' far poles are left out.
 - **Where Resolume's FFT bins sit** has not been measured; the onset detector assumes kicks are
   in the lowest quarter.
-- A tap's work lands on one frame: at the defaults 2–3 ms of CPU on the kick.
+- A tap's work lands on one frame: at the defaults 2–3 ms of CPU on the kick, about 8.5 ms at
+  60,000 filings. The first tap measured at 4K once took 25 ms, unexplained.
+- **Pole X runs across the frame's width**, so on a 4:3 frame the default poles sit closer in
+  frame heights than on 16:9, and the pattern changes with the frame's shape.
 - The defaults were chosen over five of Resolume's bundled clips through `--pipe`, looked at as
   stills, not in a show.
-- No user guide, no presets, no OpenFX port and no browser demo.
+- No presets and no OpenFX port. The [user guide](docs/USER-GUIDE.md) is the long version of
+  all this, and the [browser demo](#browser-demo) is a port (below).
 
 ## Build
 

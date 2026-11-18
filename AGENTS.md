@@ -78,7 +78,12 @@ host's beats are the only inputs; earshot (the shared capture library) is not us
 - **The cost control is Density and Size**: the count is coverage × the sheet's area / πab, at
   most 60,000. There is no separate quality control; the GPU side is under 2% of a 60 fps frame
   at 1080p even at 60,000.
-- **No OpenFX port, no browser demo** (not required this round).
+- **No OpenFX port.** The browser demo came with the release (the last section).
+- **Arena on this Mac, not the gate, carries the tap check.** The fleet's gate measures a
+  control by the clip thumbnail, and a magnet control changes nothing until a tap, so the
+  gate's expectation holds Tap On at Beat for every magnet and friction row. The Mac probe
+  read the composition monitor instead and saw the whole story: still with Tap On Off, the
+  lines coming up on the beat.
 
 ## The traps actually hit
 
@@ -127,8 +132,22 @@ that a filing lies flat and never saturates; that Resolume's 64 FFT bins put kic
 lowest quarter (nobody in the fleet has measured where they sit in frequency); that Resolume
 sends SetTime and SetBeatInfo every frame as ferrofluid assumes.
 
-Not done: loading it into Resolume on any platform; real music; a Windows build; a user
-guide, presets, an OpenFX port, a browser demo.
+In Resolume (18 November 2026), recorded in README's Status under "In Resolume": Arena 7.29.0
+on this Mac registered `FG01` as an effect, showed all 31 controls at their declared defaults,
+held the sheet still with Tap On Off while two poles moved, tapped it on Arena's beat and bar,
+and took Tap and Scatter pressed over REST. Arena on Windows (win-lab's gate) had not run when
+v0.1.0 was tagged: win-lab was held by other plugins' gates.
+
+Not done: real music (Onset on Resolume's FFT), a show, anything timed inside Resolume,
+Avenue, presets, an OpenFX port.
+
+**How the Mac probe was run** (for the next session): a copy of `build-verify/Filings.bundle`
+in `~/Documents/Resolume Arena/Extra Effects`, Arena launched with `open -g`, REST on 8080
+(server.xml enabled), one layer added on top of whatever composition opens, a white
+1920×1080 still opened and connected there with Alpha at full opacity, the effect added by
+`effect:///video/SW%20Filings`, and `/composition/monitors/1/snapshot.jpg` compared in the
+middle three-fifths of the frame. The layer deleted, `quit app "Arena"`, then **Quit** (never
+Save & Quit) in its "Quit!" window; the show's .avc mtime unchanged; the bundle removed.
 
 ## Would this hold on another rasteriser, at another raster?
 
