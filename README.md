@@ -74,6 +74,10 @@ macOS builds are signed and notarised and open normally. The Windows builds are 
 
 <!-- downloads:end -->
 
+## Video
+
+[![Filings: iron filings that the kick taps into field lines, for Resolume](docs/video-thumb.png)](https://www.youtube.com/watch?v=lNxMSqJHjiw)
+
 ## Controls
 
 | Group | |
