@@ -216,3 +216,83 @@ picture, Pole 3 and 4 with Poles at 4, Tap with Tap On Off.
 - Should filings stand up over a pole (a pile is a ring at d/√2 now, with a bare centre)?
 - Where do Resolume's 64 bins sit in frequency? The onset's "lowest quarter" assumes the kicks
   are in it.
+
+## The browser demo (2026-11-18)
+
+https://filings-demo.stoatworks-labs.com/, from `demo/`, served by the Worker in `wrangler.toml`
+(a route: the zone is at Cloudflare's 100 custom domains, so `filings-demo` needs a proxied AAAA
+`100::` record, made through the API).
+
+- **The GPU half is the plugin's.** `demo/shaders.js` is spliced from `Shaders.cpp` by
+  `demo/tools/check_shaders.py --write`; the same script (run by `tools/verify.sh`, after a grep
+  for built-ins GLSL ES 3.00 lacks) fails if a character drifts, if Shaders.cpp grows a piece it
+  does not list, if `AssembleVertex()`, `Assemble()` or InitGL join the pieces differently, or if
+  `render.js` stops joining them the same way. The GL state around them (the transmission buffer
+  cleared to 1, the multiplicative blend, the instance layout, NEAREST sampling) only a reader
+  checks. WebGL2 needs EXT_color_buffer_float (the page stops without it) and EXT_float_blend for
+  the RGBA32F buffer; without the second the page falls back to RGBA16F and says so under the
+  picture. Measured with the extension hidden: at most one 8-bit code from the RGBA32F picture,
+  99.4% of pixels identical (Chrome on Metal).
+- **The CPU half is a port, and only a reader checks it.** `demo/port.js`: Controls.cpp,
+  Physics.cpp, Sheet.cpp (the scatter, the count, the tap's two Jacobi passes, the cells,
+  contact by capsule distance) and Trigger.cpp whole, and Filings.cpp's CPU half (the frame
+  order, Scatter, the count, the trigger, the tap, the instances, the uniforms). Not ported: the
+  onset analyser (Audio.cpp: silence never fires it, so it is a constant false), the clock vote
+  (the page's clock is seconds), the threads (a Jacobi pass reads only its snapshot, so one
+  thread gives the same sheet) and the negative-control hooks (`SheetHooks`, the field's and the
+  torque's wrong models, the plugin's model switches: all off, as shipped). C++ floats are
+  mirrored with `Math.fround`; `std::clamp`, `min` and `max` as the same comparisons; `lround`
+  half away from zero; `std::remainder` as IEEE remainder. It was compared once with the C++
+  when written, by a scratch driver linking the plugin's own Release objects (arm64, and again
+  built for x86_64), dumping its state, and a script running port.js over the same inputs. That
+  comparison is not in the repository and nothing repeats it:
+  - every conversion at 1001 values, 5767 of 6006 bit-equal, worst 2.2e-16 relative (all 6006
+    with `-ffp-contract=off`: the rest are clang's fused multiply-adds); FilingCount 1001/1001;
+    the parameter table 26/26 rows (name, group, kind, default as a float, options); the needle's
+    constants within 1.2e-16 relative; the trigger's dose on 10,800 of 10,800 frames (every mode,
+    with and without a host beat, a jittery clock, presses; 353 taps);
+  - `Params()` bit for bit, and the scattered sheet bit for bit, in four scenes (the defaults at
+    960×540, four poles at 0.09 T and 1280×720, 60,000 filings at 1920×1080, one pole at
+    640×480);
+  - the tapped sheet at the defaults, worst centre and angle: 3.7e-15 su and 1.1e-13 rad after one
+    tap, 1.4e-11 and 7.5e-10 after five, 5.8e-8 and 5.6e-6 after ten, 4.7e-3 su and 1.2 rad after
+    twenty. The sheet is chaotic (a filing crossing two others, a grazed contact) and amplifies
+    the last bit about tenfold a tap. **The plugin's own x86_64 build parts from its arm64 build
+    by the same amount** (6.5e-8 su after ten taps, 6.4e-3 after twenty): clang fuses
+    multiply-adds on arm64 and V8 does not, and V8's sin, cos and atan2 are not Apple's. The sheet
+    as a whole agrees: the mean angle to the field, the share within 10° and the filings near
+    each pole are identical to three decimals in all three through ten taps, and after 40 taps
+    the mean angle is 20.23° (arm64), 20.32° (x86_64) and 20.33° (port.js);
+  - the picture: the page's canvas read back after five presses of Tap on the card at 960×540
+    (headless Chrome 157, ANGLE on this Mac's Metal), against `fgtest --out --size 960x540` with
+    the same five presses: **worst one 8-bit code, 96.8% of pixels identical** (96.7% before any
+    tap). Under SwiftShader the worst is 25 codes, 144 pixels off by more than 8, 98.2% within two.
+- **A tap's cost in the page**, measured the same way (Chrome 157 headless, Apple M4 Max, the
+  sheet's `Tap` timed in `ProcessFrame`, four runs on a machine other builds were sharing):
+  median **18 ms** at the defaults (12,478 filings; 17.6–18.0 ms a run of 30 taps; the page's
+  very first tap 28–30 ms), 47–50 ms at 24,828, **62–68 ms** at 60,000 (61–79 ms a tap). A frame without a tap costs the CPU half nothing measurable. The plugin takes 2.6 ms at the
+  defaults on eight threads. So a tap at the defaults is about one frame at 60 Hz, and at 60,000
+  filings a visible hitch; the line under the picture gives the last tap's time, and the page
+  says it. It stays on the main thread: a worker would not change the model but would show
+  each tap's result a frame or more after the beat that caused it, and the cost at the defaults
+  did not justify that. Not measured on a phone.
+- **What the page stands in for**: no audio, so Audio and Sensitivity are not on the panel
+  (ferrofluid's rule); Tap On keeps the plugin's default, Onset, which never taps there, and the
+  banner and the line under the picture say so and point at Tap and the beat modes. Resolume's BPM
+  and bar phase are a tempo menu (120 at first) and the page's clock (4/4, still when paused).
+  Tap and Scatter are toggles released after one frame, plus Tap and Scatter buttons in a host
+  row (two presses inside one frame count once). The first clip is the harness's card
+  (fgtest's `buildCard`, ported in double, uploaded as RGBA32F with NEAREST sampling, rows
+  bottom first, as fgtest hands it over). The kit's other clips are premultiplied while the
+  composite takes straight colour, and the canvas composites the plugin's straight output as
+  premultiplied; both are listed on the page. The About block is not on the panel.
+- **No photosensitivity gate**: a tap turns needles; filings does not flash (the release's
+  measurement put the worst frame-to-frame step at 0.056 of white).
+- **Traps**: the last pass's turned/moved counts differ from the C++ even where the sheet is
+  equal, because a filing pushed by two others equally from both sides gets exactly 0 in V8 and
+  an FMA residual under clang, which counts as moved: compare positions, not those counts.
+  Linking the plugin's objects for x86_64 fails on duplicate FFGL symbols (the SDK is a unity
+  build): keep only `ffgl_FFGLSDK.o`. Headless Chrome needs `SHOT_GL=1` (SwiftShader) or ANGLE
+  on Metal for WebGL2; at a phone's size under SwiftShader only two of four presses of Tap
+  0.35 s apart registered (on Metal, all four). The canvas has no preserved drawing buffer, so a
+  read-back has to happen in the frame that drew it (the test wrapped `passes.draw`).

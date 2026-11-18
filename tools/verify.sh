@@ -55,9 +55,21 @@ step "GLSL reserved words"
 reserved_words || fail "a GLSL reserved word is used as an identifier"
 
 #---------------------------------------------------------------------------
+step "GLSL: nothing WebGL2 lacks"
+#---------------------------------------------------------------------------
+# The browser demo runs these shaders unedited in WebGL2 (GLSL ES 3.00), so no
+# shader here uses a built-in it lacks either: these arrived in GLSL 4.00 /
+# ES 3.10 and compile everywhere but there. (xenon's step.)
+if grep -nE '(^|[^A-Za-z_])(findMSB|findLSB|bitCount|bitfieldExtract|bitfieldInsert|bitfieldReverse|uaddCarry|usubBorrow|umulExtended|imulExtended|frexp|ldexp|fma|textureGather|textureQueryLevels|packUnorm4x8|unpackUnorm4x8)[[:space:]]*\(' source/Shaders.cpp | grep -vE '^[0-9]+:[[:space:]]*//' ; then
+	fail "a built-in GLSL ES 3.00 does not have is in the GLSL"
+fi
+echo "   none"
+
+#---------------------------------------------------------------------------
 step "Shaders"
 #---------------------------------------------------------------------------
 tools/glslc.sh || fail "a shader does not compile"
+python3 demo/tools/check_shaders.py || fail "the demo's shaders have drifted from the plugin's"
 
 #---------------------------------------------------------------------------
 step "Submodule"

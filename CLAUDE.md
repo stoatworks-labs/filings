@@ -59,6 +59,10 @@ composite.
 - `FGTEST_RENDERER=software` runs any of it on Apple's software renderer (not `--still` or
   `--resize`: AGENTS.md says why).
 - Shared Mac: arm64 builds while iterating, no 4K loops, never kill a process you didn't start.
+- Browser demo: `python3 -m http.server 8700 --bind 127.0.0.1 --directory demo`, then
+  http://127.0.0.1:8700/ (`demo/vendor/` is the shared kit: never edit it). After changing a
+  shader run `python3 demo/tools/check_shaders.py --write`; `verify.sh` runs it without `--write`
+  and fails on any drift. `demo/port.js` is a hand port of the CPU half: change it with the C++.
 
 ## Notes
 - **All the physics is on the CPU in double**, in frame heights ("su") from the frame's centre

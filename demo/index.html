@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Filings — browser demo | Stoatworks Labs</title>
+    <meta name="description" content="Try the Filings FFGL effect for Resolume in your browser: iron filings on a sheet over your clip, magnets under it, and taps that turn the filings into the magnets' field a little at a time, so the field lines come up over a few taps. The plugin's own GLSL, ported to WebGL2 unedited, drawing a sheet laid out by a JavaScript port of its CPU half that only a reader checks. No audio reaches the page, so you tap it, or it taps on the beat. A demo, not the plugin." />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./vendor/kit.css" />
+    <link rel="stylesheet" href="./filings.css" />
+    <link rel="canonical" href="https://filings-demo.stoatworks-labs.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Stoatworks Labs" />
+    <meta property="og:title" content="Filings — browser demo | Stoatworks Labs" />
+    <meta property="og:description" content="Try the Filings FFGL effect for Resolume in your browser: iron filings on a sheet over your clip, magnets under it, and taps that turn the filings into the magnets' field a little at a time, so the field lines come up over a few taps. The plugin's own GLSL, ported to WebGL2 unedited, drawing a sheet laid out by a JavaScript port of its CPU half that only a reader checks. No audio reaches the page, so you tap it, or it taps on the beat. A demo, not the plugin." />
+    <meta property="og:url" content="https://filings-demo.stoatworks-labs.com/" />
+    <meta property="og:image" content="https://stoatworks-labs.com/thumbs/filings.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="720" />
+    <meta property="og:image:alt" content="Filings" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <main id="demo">
+      <noscript>
+        <h1>Filings</h1>
+        <p>
+          Iron filings on a sheet of acetate over your clip, magnets under the sheet, and the
+          music tapping it: an FFGL effect for Resolume Arena and Avenue. Friction pins every
+          filing to the sheet until a kick in the music taps it; each tap turns the filings
+          part way into the magnets' field, slides them towards the poles and chains them end
+          to end, so the field lines come up over a few kicks. Move a magnet and nothing
+          happens until the next kick, and a quiet passage freezes everything mid-turn.
+        </p>
+        <p>
+          This demo runs the plugin's shaders and a port of its CPU half in your browser, so
+          it needs JavaScript and WebGL2. The plugin itself, its source and its downloads are
+          on <a href="https://github.com/stoatworks-labs/filings">its repository</a>.
+        </p>
+        <ul>
+          <li><a href="https://github.com/stoatworks-labs/filings">Source on GitHub</a></li>
+        </ul>
+      </noscript>
+    </main>
+
+    <script type="module" src="./plugin.js"></script>
+    <script
+      src="./vendor/support-footer.js"
+      defer
+      data-app="Filings"
+      data-repo="https://github.com/stoatworks-labs/filings"
+      data-note="A browser demo of the plugin's shaders over a port of its CPU half. Nothing you load here leaves your machine."
+    ></script>
+  </body>
+</html>

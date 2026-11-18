@@ -165,6 +165,16 @@ Run a clip through it:
 ffmpeg -i in.mov -f rawvideo -pix_fmt rgba - | ./build/fgtest --pipe --kicks --fps 30 --size 1280x720 | ffmpeg -f rawvideo -pix_fmt rgba -s 1280x720 -r 30 -i - out.mov
 ```
 
+## Browser demo
+
+[filings-demo.stoatworks-labs.com](https://filings-demo.stoatworks-labs.com/) runs the plugin's
+own GLSL in WebGL2, unedited, drawing a sheet laid out by a JavaScript port of its CPU half (the
+magnets' field, the tap and the trigger) that only a reader checks, over the harness's card or
+the page's generated clips. No audio reaches it, so Tap On's default, Onset, never taps there:
+press Tap, or set Tap On to a beat at the page's tempo. A tap runs on the page's one thread, so it
+costs a frame or so at the defaults. It is a demo, not the plugin, and the page lists what it
+leaves out.
+
 ## License
 
 MIT. See [LICENSE](LICENSE) and [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
