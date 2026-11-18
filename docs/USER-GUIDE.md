@@ -32,7 +32,8 @@ third of the frame to its right.*
 > that are wrong on purpose and 21 one-character changes to the shipped code are all caught, and
 > all 25 controls change the picture. In Resolume Arena 7.29.0 on a Mac it loaded with every
 > control, stayed still with tapping off while the magnets moved, and brought the field lines
-> up on Arena's beat. It hasn't yet heard real music in Resolume, so Onset
+> up on Arena's beat; in Arena 7.27.1 on Windows the fleet's test gate passed it, with 23
+> controls changing the picture. It hasn't yet heard real music in Resolume, so Onset
 > is untested there. How hard a tap shakes the sheet, and the friction, are chosen, not
 > measured. Try it on a spare layer before you put it in a show.
 >
@@ -306,7 +307,9 @@ Windows  %LOCALAPPDATA%\filings\logs\filings.YYYY-MM-DD.log
   sheet. So is the filing's shape: a 1 mm needle five times as long as it is wide.
 - **Seen in Resolume, but not with music.** Arena 7.29.0 on a Mac loaded it, showed every
   control at its default, held the sheet still with Tap On Off while two magnets moved, tapped
-  it on the beat and the bar, and took Tap and Scatter. Onset has not heard
+  it on the beat and the bar, and took Tap and Scatter. Arena 7.27.1 on Windows, with no GPU,
+  passed the fleet's gate: every control as declared, 23 of them changing the picture. Onset
+  has not heard
   real music through Resolume, nothing was timed inside it, and Avenue is untested.
 - **Resolume's spectrum is unmeasured.** Onset assumes the kick is in the lowest quarter of its
   64 bins, and the Sensitivity scale is a guess that worked on the harness's music.

@@ -135,8 +135,10 @@ sends SetTime and SetBeatInfo every frame as ferrofluid assumes.
 In Resolume (18 November 2026), recorded in README's Status under "In Resolume": Arena 7.29.0
 on this Mac registered `FG01` as an effect, showed all 31 controls at their declared defaults,
 held the sheet still with Tap On Off while two poles moved, tapped it on Arena's beat and bar,
-and took Tap and Scatter pressed over REST. Arena on Windows (win-lab's gate) had not run when
-v0.1.0 was tagged: win-lab was held by other plugins' gates.
+and took Tap and Scatter pressed over REST. Arena 7.27.1 on win-lab (llvmpipe), gating the v0.1.0
+release's own zip after the tag (win-lab was held by other plugins' gates until then): 9
+passed, 0 failed, 2 skipped; 23 controls live, 17 under Tap On Beat; Audio and Sensitivity
+need sound, and Tap and Scatter are events the gate never presses.
 
 Not done: real music (Onset on Resolume's FFT), a show, anything timed inside Resolume,
 Avenue, presets, an OpenFX port.

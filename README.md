@@ -42,6 +42,38 @@ The clip is the light coming up through the sheet, as on an overhead projector i
 lesson: the filings are opaque needles in it, the clip is untouched between them, and over a
 transparent part of a clip they stand on their own.
 
+<!-- downloads:start -->
+
+## Download
+
+**[v0.1.0](https://github.com/stoatworks-labs/filings/releases/tag/v0.1.0)** — prebuilt for macOS and Windows. Pick your platform:
+
+<details>
+<summary><b>macOS</b> — Universal (Apple Silicon + Intel)</summary>
+
+| Build | Download | Size |
+| --- | --- | --- |
+| Universal (Apple Silicon + Intel) · .dmg disk image | [`filings-0.1.0-macos-universal.dmg`](https://github.com/stoatworks-labs/filings/releases/download/v0.1.0/filings-0.1.0-macos-universal.dmg) | 232 KB |
+| Universal (Apple Silicon + Intel) · .zip archive | [`filings-macos-universal.zip`](https://github.com/stoatworks-labs/filings/releases/latest/download/filings-macos-universal.zip) | 194 KB |
+
+</details>
+
+<details>
+<summary><b>Windows</b> — x64</summary>
+
+| Build | Download | Size |
+| --- | --- | --- |
+| x64 · .exe installer | [`filings-0.1.0-windows-x86_64-setup.exe`](https://github.com/stoatworks-labs/filings/releases/download/v0.1.0/filings-0.1.0-windows-x86_64-setup.exe) | 252 KB |
+| x64 · .zip archive | [`filings-windows-x86_64.zip`](https://github.com/stoatworks-labs/filings/releases/latest/download/filings-windows-x86_64.zip) | 125 KB |
+
+</details>
+
+All builds, checksums and release notes: [github.com/stoatworks-labs/filings/releases](https://github.com/stoatworks-labs/filings/releases).
+
+macOS builds are signed and notarised and open normally. The Windows builds are unsigned, so SmartScreen warns once.
+
+<!-- downloads:end -->
+
 ## Controls
 
 | Group | |
@@ -65,9 +97,8 @@ change nothing you can see.
 
 **v0.1.0, 18 November 2026: the first release.** Measured offline on macOS, the table below;
 then loaded into Resolume Arena 7.29.0 on a Mac, where it held still with tapping off and
-brought the field lines up on Arena's beat. On Windows the release workflow loads the DLL as a
-host does; Arena's gate on Windows is recorded below once it has run. It has not met real
-music in Resolume.
+brought the field lines up on Arena's beat; in Arena 7.27.1 on Windows the fleet's gate passed
+the released DLL (9 passed, 0 failed, 2 skipped). It has not met real music in Resolume.
 
 ### Measured offline, on macOS
 
@@ -127,17 +158,27 @@ composition monitor, deleted the layer (7 layers before and after) and quit with
 
 [docs/arena.jpg](docs/arena.jpg) is the composition monitor after 8 s of Tap On Beat.
 
-**Windows:** the fleet's Arena gate on win-lab had not run when v0.1.0 was tagged (win-lab
-was busy with other plugins); what the release workflow checks is under Not established.
+**Windows: Arena 7.27.1 (15990), win-lab, no GPU (Mesa llvmpipe).** The fleet's gate
+(plugin-bench `arena/expect/filings.json`) on the v0.1.0 release's own
+`filings-windows-x86_64.zip`, run after the tag because win-lab was busy with other plugins'
+gates until then: **9 passed, 0 failed, 2 skipped.**
+
+- `SW Filings` registered as `FG01`, an effect. All 32 controls (Arena's Opacity and the 31)
+  match name, order, type, range and default, About's version included.
+- The picture has content, and **23 controls move it**, 17 of them with Tap On held at Beat:
+  a magnet or friction control changes nothing until a tap.
+- Arena's log clean, and Arena alive throughout.
+- Skipped: Audio and Sensitivity (win-lab has no sound device). Tap and Scatter are events,
+  which the gate never presses; the Mac probe pressed both.
 
 ### Not established
 
 - **Real music, and a show.** Onset hasn't met Resolume's audio analysis on music, and where
   its FFT bins sit is unmeasured (below). Nothing was timed inside Resolume. Avenue is
   untested.
-- **Windows** builds under MSVC in CI (first on 7c38f44, no traps), and the release workflow
-  loads `Filings.dll` as a host does and reads back `SW Filings`, `FG01`, an effect and its 31
-  parameters. Nothing was timed on Windows.
+- **Windows on a GPU.** The gate ran on a software renderer. MSVC builds it in CI (first on
+  7c38f44, no traps), and the release workflow loads `Filings.dll` as a host does and reads
+  back `SW Filings`, `FG01`, an effect and its 31 parameters. Nothing was timed on Windows.
 - **Chosen, not measured:** the friction (no checked figure for iron on paper was found), how
   long a tap frees the sheet (one reference tap turns a filing in 4 mT by tan ψ → tan ψ/e),
   the filing's shape (a 1 mm needle of aspect 5), the softened neighbour field and its reach.
