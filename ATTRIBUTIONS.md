@@ -1,12 +1,10 @@
 # Attributions
 
-Filings is built on other people's work. This file lists what that work is, who did it, and
-what it is doing here.
+Filings is built on other people's work. This file lists what that work is, who did
+it, and what it is doing here.
 
-**A provisional hand copy (2026-11-16).** Filings is not yet registered in
-`stoatworks-backend`, so this was written by hand in the generated file's shape. Once it is
-registered, `scripts/sync-attributions.py` generates it from the master lists; edit it there
-then, not here.
+It is generated — the master lists live in the `stoatworks-backend` repo and are
+pushed out by `scripts/sync-attributions.py`. Edit it there, not here.
 
 ## Code we derived from other people's work
 
@@ -14,11 +12,11 @@ Someone else solved this first, and this project would not exist in its current 
 
 ### The harness, the tooling and the analyser — Stoatworks fountain, and ferrofluid before it
 
-<https://github.com/stoatworks-labs/ferrofluid>  
+<https://github.com/stoatworks-labs/fountain>  
 Licence: MIT  
 Copyright: Stoatworks Labs
 
-The harness's rig, PNG writer, cue sheets, --pipe/--film (SIGPIPE ignored, a closed stdout an exit of 1), --negative with its Perturb and --offline (tools/fgtest is fountain's fttest infrastructure, which is ferrofluid's fetest, under new checks), and the harness's music (fountain's: a bed, hi-hats, soft and hard kicks and a ghost note between); tools/verify.sh, tools/mutate.sh (with fountain's perl alarm), tools/glslc.sh, tools/sweep.py, the CI and release workflows and scripts/release-lib.sh; the clock's vote on seconds or milliseconds (ferrofluid's, by way of rosette and millpond) with fountain's offline fallback (source/Filings.cpp); and source/Audio.{h,cpp}, fountain's copy of ferrofluid's onset analyser (schlieren's, millpond's, rosette's, adapted from macroblock's) with its primed first frame and fountain's flux over the lowest quarter of the bins. Filings adds the hit (an onset's flux over a decaying peak of onset fluxes). All adapted. fountain lives at ~/dev/fountain and is not yet published.
+The harness's rig, PNG writer, cue sheets, --pipe/--film (SIGPIPE ignored, a closed stdout an exit of 1), --negative with its Perturb and --offline (tools/fgtest is fountain's fttest infrastructure, which is ferrofluid's fetest, under new checks), and the harness's music (fountain's: a bed, hi-hats, soft and hard kicks and a ghost note between); tools/verify.sh, tools/mutate.sh (with fountain's perl alarm), tools/glslc.sh, tools/sweep.py, the CI workflow and scripts/release-lib.sh; the clock's vote on seconds or milliseconds (ferrofluid's, by way of rosette and millpond) with fountain's offline fallback (source/Filings.cpp); and source/Audio.{h,cpp}, fountain's copy of ferrofluid's onset analyser (schlieren's, millpond's, rosette's, adapted from macroblock's) with its primed first frame and fountain's flux over the lowest quarter of the bins. Filings adds the hit (an onset's flux over a decaying peak of onset fluxes). All adapted.
 
 ### The pass buffers, the GL state and the log — Stoatworks millpond and radar
 
@@ -28,13 +26,13 @@ Copyright: Stoatworks Labs
 
 source/PassBuffer.{h,cpp} and source/Diag.{h,cpp} are millpond's. source/GLState.h is radar's, which is vectrix's, from resolume-scopes; filings adds a multiplicative blend.
 
-### The About block — Stoatworks zoetrope
+### The release workflow and the DLL check — Stoatworks xenon
 
-<https://github.com/stoatworks-labs/zoetrope>  
+<https://github.com/stoatworks-labs/xenon>  
 Licence: MIT  
 Copyright: Stoatworks Labs
 
-source/StoatworksAbout*.h, a provisional hand copy of fountain's, itself from zoetrope's first header (no user guide yet).
+.github/workflows/release.yml and tools/wincheck.ps1 are xenon's (slitscan's before it): the Windows DLL loaded as a host loads it, its name, id, type and parameters read back. Adapted.
 
 ### The look card — Stoatworks schlieren
 
@@ -54,7 +52,7 @@ Libraries, SDKs and frameworks the project is built on or bundles.
 Licence: BSD-3-Clause  
 Copyright: FreeFrame
 
-Vendored as a git submodule at external/ffgl, pinned at b1afaf9.
+Vendored as a git submodule at external/ffgl (third_party/ffgl in oxbow).
 
 The plugin ABI itself. An FFGL effect or source is defined by this SDK's headers — there is no other way to be loadable by Resolume Arena and Avenue.
 
@@ -76,19 +74,23 @@ Copyright: the PNG Reference Library authors
 
 Arrives inside the FFGL submodule, under the SDK's CustomThumbnail sample.
 
-Part of the upstream SDK tree rather than something this plugin calls directly — listed because it is present in the checkout.
+Part of the upstream SDK tree rather than something these plugins call directly — listed because it is present in the checkout.
 
 ## Work we checked ourselves against
 
 No code was taken from these — but they were how we knew we had it right, and that is worth saying out loud.
 
-### The torque on a soft ferromagnetic needle — P. Huillery et al., arXiv:1903.09699v3, eq. (1), citing J. J. Abbott et al., IEEE Trans. Robotics 23 (2007) 1247
+### The torque on a soft ferromagnetic needle — P. Huillery et al., citing J. J. Abbott et al.
 
-T = A sin 2ψ with A = V (n_r − n_a) B² / (2 μ0 n_a n_r) for a prolate soft-iron body below saturation, and the field below which that holds (source/Physics.cpp). Read in the arXiv paper; Abbott's paper itself was not read. fgtest --law checks the plugin's torque against the formula and its turn against an RK4 of the torque.
+<https://arxiv.org/abs/1903.09699>
 
-### Demagnetising factors of a prolate spheroid — J. A. Osborn, Phys. Rev. 67 (1945) 351
+arXiv:1903.09699v3, eq. (1), citing Abbott et al., IEEE Trans. Robotics 23 (2007) 1247: T = A sin 2ψ with A = V (n_r − n_a) B² / (2 μ0 n_a n_r) for a prolate soft-iron body below saturation, and the field below which that holds (source/Physics.cpp). Read in the arXiv paper; Abbott's paper itself was not read. fgtest --law checks the plugin's torque against the formula and its turn against an RK4 of the torque.
 
-The axial factor n_a(R) in closed form (source/Physics.cpp, AxialDemag), checked through two reproductions (Huillery et al., arXiv:1903.09699v3, below eq. (1); A. I. Nahlawi, Z. L. Ma, M. S. Conradi and B. Saam, arXiv:1904.11562v2, eq. (A.5)), not Osborn's paper itself. fgtest --law re-derives it from the ellipsoid's integral, and tools/constants.py from the closed form.
+### Demagnetising factors of a prolate spheroid — J. A. Osborn
+
+<https://doi.org/10.1103/PhysRev.67.351>
+
+Phys. Rev. 67 (1945) 351: the axial factor n_a(R) in closed form (source/Physics.cpp, AxialDemag), checked through two reproductions (Huillery et al., arXiv:1903.09699v3, below eq. (1); A. I. Nahlawi, Z. L. Ma, M. S. Conradi and B. Saam, arXiv:1904.11562v2, eq. (A.5)), not Osborn's paper itself. fgtest --law re-derives it from the ellipsoid's integral, and tools/constants.py from the closed form.
 
 ### The field of a magnetic point charge — J. D. Jackson, Classical Electrodynamics, 3rd ed., §6.11
 
@@ -98,9 +100,19 @@ The axial factor n_a(R) in closed form (source/Physics.cpp, AxialDemag), checked
 
 7.874 g/cm³ at 20 °C (the infobox), and iron alloys saturating at 1.6–2.2 T (Laughton and Warne, Electrical Engineer's Reference Book, 16th ed., as quoted there), which caps Strength at 100 mT.
 
-### Hash functions for GPU rendering — M. Jarzynski and M. Olano, Journal of Computer Graphics Techniques 9(3) (2020)
+### Hash functions for GPU rendering — M. Jarzynski and M. Olano
 
-They recommend a PCG-style hash as the default one-input hash; the scatter's `pcg` (source/Sheet.cpp) is the fleet's copy of it. Its constants came from the fleet's code and were not checked against the paper's supplementary code.
+<https://jcgt.org/published/0009/03/02/>
+
+Journal of Computer Graphics Techniques 9(3) (2020): they recommend a PCG-style hash as the default one-input hash; the scatter's pcg (source/Sheet.cpp) is the fleet's copy of it. Its constants came from the fleet's code and were not checked against the paper's supplementary code.
+
+## Inspirations
+
+What this set out to be. No code, assets or binaries from any of these were used or examined — the debt is to the idea.
+
+### Iron filings on an overhead projector
+
+The physics-lesson demonstration: a sheet of acetate on an overhead projector, magnets under it, filings sprinkled on and the sheet tapped until the field lines come up as black silhouettes in the light. Built from how filings behave; nothing is copied from anyone's software.
 
 ## Standards and published specifications
 

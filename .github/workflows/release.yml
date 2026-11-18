@@ -70,7 +70,7 @@ jobs:
       - name: Check the DLL (Windows)
         if: runner.os == 'Windows'
         run: |
-          ./tools/wincheck.ps1 -Dll "build/Release/Filings.dll" -Name "SW Filings" -Id FG01 -Kind effect -Params 30
+          ./tools/wincheck.ps1 -Dll "build/Release/Filings.dll" -Name "SW Filings" -Id FG01 -Kind effect -Params 31
           if( $LASTEXITCODE ) { exit $LASTEXITCODE }
 
       - name: Derive version
